@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Who Is Who? – Four-Column Puzzle</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #fdfdfd;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #34495e;
+    }
+    .container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+    .column {
+      width: 22%;
+      min-width: 200px;
+      background-color: #ecf0f1;
+      padding: 10px;
+      border-radius: 8px;
+      border: 2px solid #bdc3c7;
+    }
+    .column h3 {
+      margin-bottom: 10px;
+      color: #2c3e50;
+    }
+    .dropzone {
+      min-height: 40px;
+      margin: 8px 0;
+      padding: 6px;
+      border: 2px dashed #7f8c8d;
+      border-radius: 5px;
+      background-color: #ffffff;
+    }
+    .option {
+      display: inline-block;
+      padding: 8px 12px;
+      margin: 8px;
+      background-color: #3498db;
+      color: white;
+      border-radius: 5px;
+      cursor: grab;
+    }
+    .option.dragging {
+      opacity: 0.5;
+    }
+    #message {
+      margin-top: 30px;
+      font-size: 1.4em;
+      color: #27ae60;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧩 Who Is Who?</h1>
+  <p><strong>Drag each trait into the correct person’s column.</strong><br>Arrastra cada característica a la columna correcta.</p>
+
+  <div class="container">
+    <div class="column" data-person="María">
+      <h3>Lauren</h3>
+      <div class="dropzone" data-answer="creative"></div>
+    </div>
+    <div class="column" data-person="Carlos">
+      <h3>Dana</h3>
+      <div class="dropzone" data-answer="funny"></div>
+    </div>
+    <div class="column" data-person="Lucía">
+      <h3>Massiel</h3>
+      <div class="dropzone" data-answer="intelligent"></div>
+    </div>
+    <div class="column" data-person="Pedro">
+      <h3>Josué</h3>
+      <div class="dropzone" data-answer="kind"></div>
+    </div>
+  </div>
+
+  <div style="margin-top: 30px;">
+    <div class="option" draggable="true" data-word="creative">creative / creativa</div>
+    <div class="option" draggable="true" data-word="funny">funny / gracioso</div>
+    <div class="option" draggable="true" data-word="intelligent">intelligent / inteligente</div>
+    <div class="option" draggable="true" data-word="kind">kind / amable</div>
+  </div>
+
+  <div id="message">🎉 Everyone shines in their own way – Todos brillan a su manera.</div>
+
+  <script>
+    const options = document.querySelectorAll('.option');
+    const dropzones = document.querySelectorAll('.dropzone');
+    let correctCount = 0;
+
+    options.forEach(option => {
+      option.addEventListener('dragstart', () => {
+        option.classList.add('dragging');
+      });
+      option.addEventListener('dragend', () => {
+        option.classList.remove('dragging');
+      });
+    });
+
+    dropzones.forEach(zone => {
+      zone.addEventListener('dragover', e => {
+        e.preventDefault();
+      });
+
+      zone.addEventListener('drop', e => {
+        const dragged = document.querySelector('.dragging');
+        const word = dragged.getAttribute('data-word');
+        const answer = zone.getAttribute('data-answer');
+
+        if (word === answer && zone.innerHTML === '') {
+          zone.innerHTML = dragged.innerHTML;
+          dragged.style.display = 'none';
+          correctCount++;
+          if (correctCount === dropzones.length) {
+            document.getElementById('message').style.display = 'block';
+          }
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
